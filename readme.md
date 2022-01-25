@@ -10,6 +10,13 @@
     - [Motor Configuration](#motor-configuration)
     - [Bed Heater Thermistor](#bed-heater-thermistor)
     - [Hotend Thermistor](#hotend-thermistor)
+- [Initial Setup](#initial-setup)
+    - [Motor Setup](#motor-setup)
+    - [Configuring Limits](#configuring-limits)
+    - [Inductive Probe](#inductive-probe)
+    - [PID Tune](#pid-tune)
+    - [Bed Levelling](#bed-levelling)
+- [Z Offset Adjustment](#z-offset-adjustment)
 - [Notes from Steve Build](#notes-from-steve-build)
 - [Spider Setup](#spider-setup)
     - [WARNING](#warning)
@@ -203,6 +210,133 @@ got [(vonwange) ATC Semitec 104GT-2](https://vonwange.com/product/vonwange-atc-s
 [extruder]
 sensor_type: ATC Semitec 104GT-2
 ```
+
+# Initial Setup
+[up up up](#)
+
+* [Initial Startup Checks ](https://docs.vorondesign.com/build/startup/)
+* [Configuration checks¶](https://www.klipper3d.org/Config_checks.html)
+
+## Motor Setup
+
+```console
+STEPPER_BUZZ STEPPER=stepper_x
+STEPPER_BUZZ STEPPER=stepper_y
+STEPPER_BUZZ STEPPER=stepper_z
+STEPPER_BUZZ STEPPER=stepper_z1
+STEPPER_BUZZ STEPPER=stepper_z2
+STEPPER_BUZZ STEPPER=extruder
+
+QUERY_ENDSTOPS
+```
+
+check this try to do a home x and y and invert pins if required
+
+```yaml
+dir_pin: PD6
+```
+
+![V1-motor-configuration-guide.png](images/V1-motor-configuration-guide.png)
+
+
+## Configuring Limits
+
+```gcode
+G90
+G28 X Y
+G1 X300.00 Y300.00 F7800
+G1 X0.00 Y0.00 F7800
+M114 # get current location
+G1 X300.00 Y0.00 F7800
+G1 X0.00 Y300.00 F7800
+G90
+G1 X170.00 Y300.00 F7800
+```
+
+Figure out where Z-Endstop is update [homing_override] or [safe_z_home] with those values. For me it is 170
+
+## Inductive Probe
+
+```
+G28 X Y Z
+QUERY_PROBE
+# move bed close to nozzle
+QUERY_PROBE
+// probe: TRIGGERED
+// PROBE_ACCURACY at X:150.000 Y:149.000 Z:35.000 (samples=10 retract=3.000 speed=5.0 lift_speed=5.0)
+08:21:06  // probe at 150.000,149.000 is z=8.280000
+08:21:08  // probe at 150.000,149.000 is z=8.281250
+08:21:10  // probe at 150.000,149.000 is z=8.281250
+08:21:11  // probe at 150.000,149.000 is z=8.281250
+08:21:13  // probe at 150.000,149.000 is z=8.281250
+08:21:15  // probe at 150.000,149.000 is z=8.281250
+08:21:16  // probe at 150.000,149.000 is z=8.281250
+08:21:18  // probe at 150.000,149.000 is z=8.281250
+08:21:19  // probe at 150.000,149.000 is z=8.281250
+08:21:21  // probe at 150.000,149.000 is z=8.281250
+08:21:21  // probe accuracy results: maximum 8.281250, minimum 8.280000, range 0.001250, average 8.281125, median 8.281250, standard deviation 0.000375
+```
+
+## PID Tune
+
+```
+G28 X Y Z
+G90
+G1 Z7.00 F7800
+PID_CALIBRATE HEATER=heater_bed TARGET=60
+// PID parameters: pid_Kp=40.922 pid_Ki=1.057 pid_Kd=395.922
+
+M106 S100
+PID_CALIBRATE HEATER=extruder TARGET=210
+// PID parameters: pid_Kp=25.246 pid_Ki=1.476 pid_Kd=107.925
+```
+
+## Bed Levelling
+
+verify that the following are under the probe:
+
+```yaml
+points:
+    30, 5
+    150, 245
+    270, 5
+```
+
+For this process **NEVER** have the part fan on
+
+```
+G28 X Y
+G90
+G1 X30.00 Y5.00 F7800
+G1 X150.00 Y245.00 F7800
+G1 X270.00 Y5.00 F7800
+
+SET_HEATER_TEMPERATURE HEATER=extruder TARGET=210
+SET_HEATER_TEMPERATURE HEATER=heater_bed TARGET=60
+
+G28 X Y Z
+G90
+G1 Z10.00 F7800
+# allow some time needed for the probe to stabilize ~ 5 min
+# wait until standard deviation < 0.003
+PROBE_ACCURACY
+G1 Z10.00 F7800
+Z_TILT_ADJUST
+```
+
+# Z Offset Adjustment
+
+```
+G28
+BED_MESH_CLEAR
+Z_ENDSTOP_CALIBRATE
+TESTZ Z=-30.0
+TESTZ Z=-2.0
+TESTZ Z=-0.3
+```
+
+The Z offset can be adjusted during a print using the Tune menu on the display, and the printer configuration can be updated with this new value. Remember that higher values for the position_endstop means that the nozzle will be closer to the bed.
+
 
 # Notes from Steve Build
 
