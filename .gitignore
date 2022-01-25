@@ -1,0 +1,8 @@
+# this has all the information related to SMBIOS do not commit
+.DS_Store
+!.gitignore
+Assembly_Manual_Trident.pdf
+FYSETC-SPIDER/*
+Voron-Addons/*
+Voron-Switchwire-1.0/*
+Voron-Trident/*
