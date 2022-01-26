@@ -340,6 +340,8 @@ ACCEPT
 
 The Z offset can be adjusted during a print using the Tune menu on the display, and the printer configuration can be updated with this new value. Remember that higher values for the position_endstop means that the nozzle will be closer to the bed.
 
+**Important:** Klipper assumes that this process is being done cold. If being performed hot, do an additional TESTZ Z=-0.1 before accepting.
+
 ## FUN
 
 ```
