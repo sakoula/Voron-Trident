@@ -16,7 +16,9 @@
     - [Inductive Probe](#inductive-probe)
     - [PID Tune](#pid-tune)
     - [Bed Levelling](#bed-levelling)
-- [Z Offset Adjustment](#z-offset-adjustment)
+    - [Z Offset Adjustment](#z-offset-adjustment)
+    - [FUN](#fun)
+    - [Extruder Calibration \(e-steps\)](#extruder-calibration-e-steps)
 - [Notes from Steve Build](#notes-from-steve-build)
 - [Spider Setup](#spider-setup)
     - [WARNING](#warning)
@@ -324,7 +326,7 @@ G1 Z10.00 F7800
 Z_TILT_ADJUST
 ```
 
-# Z Offset Adjustment
+## Z Offset Adjustment
 
 ```
 G28
@@ -333,10 +335,30 @@ Z_ENDSTOP_CALIBRATE
 TESTZ Z=-30.0
 TESTZ Z=-2.0
 TESTZ Z=-0.3
+ACCEPT
 ```
 
 The Z offset can be adjusted during a print using the Tune menu on the display, and the printer configuration can be updated with this new value. Remember that higher values for the position_endstop means that the nozzle will be closer to the bed.
 
+## FUN
+
+```
+M117 Homing...
+G28 Y0 X0 Z0
+Z_TILT_ADJUST
+BED_MESH_CALIBRATE
+```
+
+## Extruder Calibration (e-steps)
+
+```
+SET_HEATER_TEMPERATURE HEATER=extruder TARGET=210
+# measure 120mm and tie a tie wrap
+extrude twice 50mm and measure
+measured 21mm
+New Config Value = Old Config Value * (Actual Extruded Amount/Target Extruded Amount)
+22.4899598 = 22.6789511 * (119/120)
+```
 
 # Notes from Steve Build
 
