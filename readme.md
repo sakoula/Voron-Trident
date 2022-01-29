@@ -2,6 +2,8 @@
 
 <!-- MarkdownTOC -->
 
+- [Very Important Links](#very-important-links)
+- [Crimping Microfits](#crimping-microfits)
 - [Voron Afterburner PCB setup](#voron-afterburner-pcb-setup)
 - [Fysetc Spider Wiring](#fysetc-spider-wiring)
 - [Klipper Firmware](#klipper-firmware)
@@ -19,6 +21,7 @@
     - [Z Offset Adjustment](#z-offset-adjustment)
     - [FUN](#fun)
     - [Extruder Calibration \(e-steps\)](#extruder-calibration-e-steps)
+    - [Bed Mesh](#bed-mesh)
 - [Notes from Steve Build](#notes-from-steve-build)
 - [Spider Setup](#spider-setup)
     - [WARNING](#warning)
@@ -27,12 +30,23 @@
     - [Compile Klipper for USB connectivity](#compile-klipper-for-usb-connectivity)
     - [Compile Klipper for GPIO connectivity](#compile-klipper-for-gpio-connectivity)
     - [Flash Firmware](#flash-firmware)
+- [Shopping List](#shopping-list)
 - [Neopixels](#neopixels)
 
 <!-- /MarkdownTOC -->
 
+# Very Important Links
+[up up up](#)
 
-# Voron Afterburner PCB setup
+- [Print-Tuning-Guide](https://github.com/AndrewEllis93/Print-Tuning-Guide)
+- [Docs](https://docs.vorondesign.com/)
+- [Calculating Driver Current Settings](https://docs.vorondesign.com/community/howto/120decibell/calculating_driver_current.html)
+
+some mods
+
+- [Logan's mods](https://github.com/LoganFraser/VoronMods)
+
+# Crimping Microfits
 [up up up](#)
 
 - [Crimping Microfits](https://www.youtube.com/watch?v=jM3Xfs3Nie4&t=66s)
@@ -40,6 +54,14 @@
 correct way to insert crimp to microfit3:
 
 ![crimp.png](images/crimp.png)
+
+- [Crimps](https://github.com/AndrewEllis93/Print-Tuning-Guide#crimps)
+
+![Microfit-Housings.jpg](images/Microfit-Housings.jpg)
+
+# Voron Afterburner PCB setup
+[up up up](#)
+
 
 **Pinout**
 
@@ -361,6 +383,38 @@ measured 21mm
 New Config Value = Old Config Value * (Actual Extruded Amount/Target Extruded Amount)
 22.4899598 = 22.6789511 * (119/120)
 ```
+
+## Bed Mesh
+
+I tried a bed mesh with cold bed and got the following results:
+
+```
+#*# [bed_mesh default]
+#*# version = 1
+#*# points =
+#*#       0.002500, 0.011250, 0.006250, 0.016250, 0.005000
+#*#       0.007500, 0.003750, -0.001250, 0.007500, -0.011250
+#*#       0.027500, 0.013750, 0.000000, 0.003750, -0.015000
+#*#       0.046250, 0.018750, -0.000000, 0.002500, -0.015000
+#*#       0.070000, 0.025000, 0.002500, 0.005000, -0.018750
+#*# tension = 0.2
+#*# min_x = 40.0
+#*# algo = bicubic
+#*# y_count = 5
+#*# mesh_y_pps = 2
+#*# min_y = 40.0
+#*# x_count = 5
+#*# max_y = 260.0
+#*# mesh_x_pps = 2
+#*# max_x = 260.0
+```
+
+I posted on discord and it is good:
+
+![bedmesh1.png](images/bedmesh1.png)
+![bedmesh2.png](images/bedmesh2.png)
+![bedmesh3.png](images/bedmesh3.png)
+
 
 # Notes from Steve Build
 
@@ -820,7 +874,13 @@ shutdown everything, remove sdcard and verify that the `firmware.bin` is not the
 
 when you  want to upgrade the firmware you will always do it with the sdcard.
 
+# Shopping List
+[up up up](#)
+
+- [3M 4910 VHB Tape 6mm x 3M](https://www.aliexpress.com/item/1005002289433427.html?algo_exp_id=21c8c194-9dd2-4cf6-b02c-53a4691dd59c-1&pdp_ext_f=%7B%22sku_id%22%3A%2212000019932311550%22%7D&pdp_pi=-1%3B2.85%3B-1%3B-1%40salePrice%3BEUR%3Bsearch-mainSearch)
+- [3M VHB 5608 Double Sided Acrylic Foam Adhesive Tape Waterproof Heavy Duty Mounting Tape Indoor Outdoor Use Free Shipping 5mm x 3m](https://www.aliexpress.com/item/1005002015627817.html)
 
 # Neopixels
+[up up up](#)
 
 [yes!](https://discord.com/channels/460117602945990666/822468097637875712/932038192750792754)
